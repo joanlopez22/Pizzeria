@@ -1,0 +1,45 @@
+<resources>
+    <!-- General -->
+    <string name="app_name">Pizzeria Manager</string>
+    <string name="guardar">Guardar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Main Activity -->
+    <string name="filtre_descripcio">Filtrar por descripción</string>
+    <string name="ordenar_referencia">Referencia</string>
+    <string name="ordenar_descripcio">Descripción</string>
+    <string name="afegir_referencia">Añadir nueva referencia</string>
+
+    <!-- Add/Edit Activity -->
+    <string name="referencia">Referencia</string>
+    <string name="descripcio">Descripción</string>
+    <string name="preu_sense_iva">Preu sense IVA</string>
+    <string name="error_referencia">Referencia inválida</string>
+    <string name="error_descripcio">Descripción obligatoria</string>
+    <string name="error_preu">Preu inválido</string>
+
+    <!-- Dialogos -->
+    <string name="delete_title">Eliminar artículo</string>
+    <string name="delete_message">¿Seguro que quieres eliminar %s?</string>
+
+    <!-- Config -->
+    <string name="config_iva">IVA Actual: %.2f%%</string>
+    <string name="hint_iva">Introduce el IVA (ej: 0.21)</string>
+
+    <!-- Arrays -->
+    <string-array name="tipus_options">
+        <item>PIZZA</item>
+        <item>PIZZA VEGANA</item>
+        <item>PIZZA CELIACA</item>
+        <item>TOPPING</item>
+    </string-array>
+
+    <string-array name="tipus_filtre_options">
+        <item>Tots els tipus</item>
+        <item>PIZZA</item>
+        <item>PIZZA VEGANA</item>
+        <item>PIZZA CELIACA</item>
+        <item>TOPPING</item>
+    </string-array>
+</resources>
