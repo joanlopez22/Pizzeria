@@ -15,6 +15,8 @@ import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ActivityMainBinding
 import com.example.pizzeria.ui.adapters.ArticleAdapter
 import com.example.pizzeria.ui.ArticleViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: ArticleViewModel
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupRecyclerView()
         setupListeners()
+        setupFabListener()  // Añadido para escuchar el clic en el FAB
     }
 
     private fun setupViewModel() {
@@ -79,14 +82,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupFabListener() {
+        // Configurar el FloatingActionButton para abrir la actividad de creación
+        val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
+        fabAdd.setOnClickListener {
+            navigateToAdd()  // Llamar al método que abre la actividad de creación
+        }
+    }
+
     private fun navigateToAdd() {
-        val intent = Intent(this, AddEditActivity::class.java)
+        // Crear una Intent para abrir la actividad de agregar una nueva pizza
+        val intent = Intent(this, AddEditPizzaActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateToEdit(article: Article) {
-        val intent = Intent(this, AddEditActivity::class.java).apply {
-            putExtra("article", article)
+        val intent = Intent(this, AddEditPizzaActivity::class.java).apply {
+            putExtra("article", article)  // Enviar el artículo seleccionado para editar
         }
         startActivity(intent)
     }
@@ -102,5 +114,4 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
-
 }
