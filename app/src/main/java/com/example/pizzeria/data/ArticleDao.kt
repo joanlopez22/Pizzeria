@@ -1,15 +1,15 @@
-// data/ArticleDao.kt
 package com.example.pizzeria.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
-
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 @Dao
 interface ArticleDao {
-    @Query("SELECT * FROM articles WHERE (:tipusFilter = 'ALL' OR tipus = :tipusFilter) AND descripcio LIKE '%' || :textFilter || '%' ORDER BY CASE WHEN :orderBy = 'REFERENCIA' THEN referencia ELSE descripcio END")
-    fun getFilteredArticles(textFilter: String, tipusFilter: String, orderBy: String): LiveData<List<Article>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(article: Article)
 
     @Update
@@ -17,4 +17,10 @@ interface ArticleDao {
 
     @Delete
     suspend fun delete(article: Article)
+
+    @Query("SELECT * FROM articles WHERE descripcio LIKE :text AND tipus LIKE :type ORDER BY referencia ASC")
+    fun getFilteredOrderedByReference(text: String, type: String): LiveData<List<Article>>
+
+    @Query("SELECT * FROM articles WHERE descripcio LIKE :text AND tipus LIKE :type ORDER BY descripcio ASC")
+    fun getFilteredOrderedByDescription(text: String, type: String): LiveData<List<Article>>
 }

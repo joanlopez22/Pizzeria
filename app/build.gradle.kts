@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -38,7 +39,6 @@ android {
         jvmTarget = "17"
     }
 }
-
 dependencies {
     val room_version = "2.6.1"
     val lifecycle_version = "2.7.0"

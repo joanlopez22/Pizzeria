@@ -1,19 +1,18 @@
-// ui/ConfigActivity.kt
 package com.example.pizzeria.ui
 
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
-import com.example.pizzeria.databinding.ActivityConfigBinding
+import com.example.pizzeria.databinding.ActivityMainBinding  // Cambia esto a ActivityMainBinding
 
 class ConfigActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityConfigBinding
+    private lateinit var binding: ActivityMainBinding  // Usa ActivityMainBinding
     private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityConfigBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)  // Cambia esto a ActivityMainBinding
         setContentView(binding.root)
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)

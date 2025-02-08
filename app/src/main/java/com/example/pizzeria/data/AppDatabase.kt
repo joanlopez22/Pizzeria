@@ -1,4 +1,3 @@
-// data/AppDatabase.kt
 package com.example.pizzeria.data
 
 import android.content.Context
@@ -19,8 +18,8 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "pizzeria_db"
-                ).fallbackToDestructiveMigration().build()
+                    "pizzeria_database"
+                ).build()
                 INSTANCE = instance
                 instance
             }

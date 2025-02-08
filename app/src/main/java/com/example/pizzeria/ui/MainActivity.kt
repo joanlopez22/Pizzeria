@@ -1,16 +1,20 @@
-// ui/MainActivity.kt
 package com.example.pizzeria.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pizzeria.R
+import com.example.pizzeria.Strings
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ActivityMainBinding
-
+import com.example.pizzeria.ui.adapters.ArticleAdapter
+import com.example.pizzeria.ui.ArticleViewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: ArticleViewModel
@@ -27,8 +31,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
-        viewModel.articles.observe(this) { adapter.submitList(it) }
+        viewModel = ViewModelProvider(this@MainActivity).get(ArticleViewModel::class.java)
+
+        // Observar los cambios en los artículos filtrados
+        viewModel.articles.observe(this) { articles ->
+            adapter.submitList(articles)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -43,14 +51,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // En MainActivity.kt (dentro de setupListeners())
     private fun setupListeners() {
-        // Filtro por texto
+        // Listener para el campo de filtro por texto
         binding.etFilterText.doAfterTextChanged { text ->
             viewModel.currentFilterText.value = text?.toString() ?: ""
         }
 
-        // Filtro por tipo
+        // Listener para el Spinner de filtro de tipo
         binding.spinnerFilterType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 val selected = resources.getStringArray(R.array.tipus_filtre_options)[pos]
@@ -59,10 +66,11 @@ class MainActivity : AppCompatActivity() {
                     else -> selected
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Ordenación
+        // Listener para el grupo de botones de ordenamiento
         binding.sortGroup.setOnCheckedChangeListener { _, checkedId ->
             viewModel.currentOrder.value = when (checkedId) {
                 R.id.rbSortReference -> Strings.ORDER_BY_REFERENCE
@@ -71,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // En MainActivity.kt (completar navigateToAdd() y navigateToEdit())
     private fun navigateToAdd() {
         val intent = Intent(this, AddEditActivity::class.java)
         startActivity(intent)
@@ -83,11 +90,15 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
     private fun showDeleteDialog(article: Article) {
+        // Confirmación para eliminar el artículo
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_title))
             .setMessage(getString(R.string.delete_message, article.referencia))
-            .setPositiveButton(getString(R.string.delete)) { _, _ -> viewModel.delete(article) }
+            .setPositiveButton(getString(R.string.eliminar)) { _, _ ->
+                viewModel.delete(article) // Llamar a delete en el ViewModel
+            }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }

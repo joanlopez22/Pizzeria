@@ -35,12 +35,22 @@
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Añadido TextInputLayout para el campo etIva -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ivaLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/filterTextLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="409dp"
+        android:layout_height="505dp"
         app:layout_constraintBottom_toTopOf="@+id/sortGroup"
-        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"
+        tools:layout_editor_absoluteX="2dp" />
 
     <RadioGroup
         android:id="@+id/sortGroup"
@@ -73,5 +83,7 @@
         android:src="@android:drawable/ic_menu_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Añadido el botón Save -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,10 @@
-// ui/AddEditActivity.kt
 package com.example.pizzeria.ui
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.pizzeria.R
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ActivityAddEditBinding
@@ -11,11 +12,15 @@ import com.example.pizzeria.databinding.ActivityAddEditBinding
 class AddEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEditBinding
     private var currentArticle: Article? = null
+    private lateinit var viewModel: ArticleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+            .get(ArticleViewModel::class.java)
 
         setupUI()
     }
@@ -25,8 +30,7 @@ class AddEditActivity : AppCompatActivity() {
         currentArticle?.let { fillForm(it) }
 
         binding.btnSave.setOnClickListener { validateAndSave() }
-        // En setupUI() de AddEditActivity.kt
-// Configurar spinner de tipos
+
         ArrayAdapter.createFromResource(
             this,
             R.array.tipus_options,
@@ -50,7 +54,6 @@ class AddEditActivity : AppCompatActivity() {
         return resources.getStringArray(R.array.tipus_options).indexOf(tipus)
     }
 
-    // En AddEditActivity.kt (completar validateAndSave())
     private fun validateAndSave() {
         val referencia = binding.etReference.text.toString().trim().uppercase()
         val descripcio = binding.etDescripcio.text.toString().trim()
@@ -59,7 +62,6 @@ class AddEditActivity : AppCompatActivity() {
 
         var isValid = true
 
-        // Validar referencia
         if (!isReferenciaValid(referencia, tipus)) {
             binding.tilReference.error = getString(R.string.error_referencia)
             isValid = false
@@ -67,7 +69,6 @@ class AddEditActivity : AppCompatActivity() {
             binding.tilReference.error = null
         }
 
-        // Validar descripción
         if (descripcio.isEmpty()) {
             binding.tilDescripcio.error = getString(R.string.error_descripcio)
             isValid = false
@@ -75,7 +76,6 @@ class AddEditActivity : AppCompatActivity() {
             binding.tilDescripcio.error = null
         }
 
-        // Validar precio
         if (preu == null || preu <= 0) {
             binding.tilPreu.error = getString(R.string.error_preu)
             isValid = false
@@ -104,5 +104,4 @@ class AddEditActivity : AppCompatActivity() {
             else -> true
         }
     }
-
 }
