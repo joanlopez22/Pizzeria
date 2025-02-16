@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
@@ -60,6 +61,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.currentFilterText.value = text?.toString() ?: ""
         }
 
+        // Configurar el Spinner para el filtro de tipo
+        val adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.tipus_filtre_options, // Este array está definido en res/values/strings.xml
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerFilterType.adapter = adapter
+
         // Listener para el Spinner de filtro de tipo
         binding.spinnerFilterType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
@@ -92,12 +102,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToAdd() {
         // Crear una Intent para abrir la actividad de agregar una nueva pizza
-        val intent = Intent(this, AddEditPizzaActivity::class.java)
+        val intent = Intent(this, AddEditActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateToEdit(article: Article) {
-        val intent = Intent(this, AddEditPizzaActivity::class.java).apply {
+        val intent = Intent(this, AddEditActivity::class.java).apply {
             putExtra("article", article)  // Enviar el artículo seleccionado para editar
         }
         startActivity(intent)

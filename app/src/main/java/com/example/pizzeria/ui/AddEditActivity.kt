@@ -5,9 +5,12 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.pizzeria.R
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ActivityAddEditBinding
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class AddEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEditBinding
@@ -26,14 +29,16 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
+        // Obtén el artículo actual si lo hay
         currentArticle = intent.getParcelableExtra("article")
         currentArticle?.let { fillForm(it) }
 
         binding.btnSave.setOnClickListener { validateAndSave() }
 
+        // Configura el spinner de tipos de pizza
         ArrayAdapter.createFromResource(
             this,
-            R.array.tipus_options,
+            R.array.tipus_options,  // Asegúrate de que tienes este array en strings.xml
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -55,16 +60,19 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     private fun validateAndSave() {
-        val referencia = binding.etReference.text.toString().trim().uppercase()
-        val descripcio = binding.etDescripcio.text.toString().trim()
-        val preu = binding.etPreu.text.toString().toFloatOrNull()
-        val tipus = binding.spnTipus.selectedItem.toString()
+        val referencia = binding.tilReference.editText?.text.toString().trim().uppercase()
+        val descripcio = binding.tilDescripcio.editText?.text.toString().trim()
+        val preu = binding.tilPreu.editText?.text.toString().toFloatOrNull()
+        val tipus = binding.spnTipus.selectedItem?.toString() ?: ""
 
         var isValid = true
+        var errorMessage = ""
 
+        // Validaciones
         if (!isReferenciaValid(referencia, tipus)) {
             binding.tilReference.error = getString(R.string.error_referencia)
             isValid = false
+            errorMessage += "Referencia incorrecta.\n"
         } else {
             binding.tilReference.error = null
         }
@@ -72,6 +80,7 @@ class AddEditActivity : AppCompatActivity() {
         if (descripcio.isEmpty()) {
             binding.tilDescripcio.error = getString(R.string.error_descripcio)
             isValid = false
+            errorMessage += "Descripción vacía.\n"
         } else {
             binding.tilDescripcio.error = null
         }
@@ -79,17 +88,33 @@ class AddEditActivity : AppCompatActivity() {
         if (preu == null || preu <= 0) {
             binding.tilPreu.error = getString(R.string.error_preu)
             isValid = false
+            errorMessage += "Precio inválido.\n"
         } else {
             binding.tilPreu.error = null
         }
 
-        if (isValid) {
-            val article = Article(referencia, descripcio, tipus, preu!!)
+        if (tipus.isEmpty()) {
+            errorMessage += "Tipo de pizza no seleccionado.\n"
+            isValid = false
+        }
+
+        if (!isValid) {
+            Snackbar.make(binding.root, errorMessage.trim(), Snackbar.LENGTH_LONG).show()
+            return
+        }
+
+        val article = Article(referencia, descripcio, tipus, preu!!)
+
+        // Lanzar la operación en un coroutine
+        lifecycleScope.launch {
             if (currentArticle == null) {
+                // Si no hay un artículo actual, insertamos
                 viewModel.insert(article)
             } else {
+                // Si hay un artículo actual, actualizamos
                 viewModel.update(article)
             }
+            // Después de realizar la operación, cerramos la actividad
             finish()
         }
     }
