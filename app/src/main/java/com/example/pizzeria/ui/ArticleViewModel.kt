@@ -6,13 +6,13 @@ import com.example.pizzeria.data.AppDatabase
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.data.ArticleRepository
 import kotlinx.coroutines.launch
-
 class ArticleViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ArticleRepository
     val currentFilterText = MutableLiveData<String>()
     val currentFilterType = MutableLiveData<String>()
     val currentOrder = MutableLiveData<String>()
+    val ivaPercentage = MutableLiveData<Float>().apply { value = 21f } // Valor predeterminado del IVA
 
     private val _articles = MediatorLiveData<List<Article>>()
     val articles: LiveData<List<Article>> get() = _articles
@@ -42,6 +42,12 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         _articles.addSource(repository.getFiltered(text, type, order)) { articles ->
             _articles.value = articles  // Asignamos directamente los artículos filtrados
         }
+    }
+
+    // Función para calcular el precio con IVA
+    fun calculatePriceWithIva(priceWithoutIva: Float): Float {
+        val iva = ivaPercentage.value ?: 21f  // Obtenemos el IVA o el valor predeterminado
+        return priceWithoutIva * (1 + iva / 100)
     }
 
     fun insert(article: Article) = viewModelScope.launch {

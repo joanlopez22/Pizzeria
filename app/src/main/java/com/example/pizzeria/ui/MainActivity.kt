@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupRecyclerView()
         setupListeners()
-        setupFabListener()  // Añadido para escuchar el clic en el FAB
+        setupFabListener()
+        setupConfigButton()// Añadido para escuchar el clic en el FAB
     }
 
     private fun setupViewModel() {
@@ -112,6 +113,14 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+    private fun setupConfigButton() {
+        val fabSettings: FloatingActionButton = findViewById(R.id.fabSettings)
+        fabSettings.setOnClickListener {
+            val intent = Intent(this, ConfigActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
 
     private fun showDeleteDialog(article: Article) {
         // Confirmación para eliminar el artículo

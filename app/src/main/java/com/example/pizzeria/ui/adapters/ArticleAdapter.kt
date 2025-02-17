@@ -1,4 +1,3 @@
-// ui/adapters/ArticleAdapter.kt
 package com.example.pizzeria.ui.adapters
 
 import android.content.Context
@@ -6,18 +5,22 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pizzeria.R
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ItemArticleBinding
+import com.example.pizzeria.ui.ArticleViewModel
 
 class ArticleAdapter(
     private val context: Context,
     private val onItemClick: (Article) -> Unit,
     private val onDeleteClick: (Article) -> Unit
 ) : ListAdapter<Article, ArticleAdapter.ViewHolder>(DiffCallback()) {
+
+    private val viewModel: ArticleViewModel = ViewModelProvider(context as androidx.appcompat.app.AppCompatActivity).get(ArticleViewModel::class.java)
 
     inner class ViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -33,11 +36,17 @@ class ArticleAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val article = getItem(position)
+
+        // Obtener el precio con IVA
+        val priceWithIva = viewModel.calculatePriceWithIva(article.preuSenseIva)
+
         with(holder.binding) {
             root.setBackgroundColor(getColorForType(article.tipus))
             tvReference.text = article.referencia
             tvDescription.text = article.descripcio
-            tvPrice.text = "%.2f€".format(article.preuSenseIva)
+
+            // Mostrar el precio con IVA
+            tvPrice.text = "%.2f€".format(priceWithIva)
 
             btnDelete.setOnClickListener { onDeleteClick(article) }
             root.setOnClickListener { onItemClick(article) }

@@ -23,7 +23,9 @@
 
         <!-- Asegúrate de que el nombre sea el correcto para AddEditActivity -->
         <activity android:name=".ui.AddEditActivity" />
-
+        <activity android:name=".ui.ConfigActivity">
+            <!-- Si es necesario, agrega otras configuraciones o temas -->
+        </activity>
     </application>
 
 </manifest>

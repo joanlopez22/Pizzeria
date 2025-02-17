@@ -1,44 +1,30 @@
 package com.example.pizzeria.ui
 
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
-import com.example.pizzeria.databinding.ActivityAddEditBinding // Asegúrate de que este nombre esté correcto
-
+import androidx.lifecycle.ViewModelProvider
+import com.example.pizzeria.databinding.ActivityIvaBinding
 class ConfigActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddEditBinding
-    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var binding: ActivityIvaBinding
+    private lateinit var viewModel: ArticleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddEditBinding.inflate(layoutInflater)
+        binding = ActivityIvaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setupUI()
-    }
+        // Obtener la instancia del ViewModel
+        viewModel = ViewModelProvider(this).get(ArticleViewModel::class.java)
 
-    private fun setupUI() {
-        // Cargar el IVA guardado (si existe) o asignar un valor por defecto (0.10f).
-        binding.etPreu.setText(sharedPrefs.getFloat("iva", 0.10f).toString())
-        binding.btnSave.setOnClickListener { saveSettings() }
-    }
-
-    private fun saveSettings() {
-        // Obtener el precio sin IVA desde el EditText.
-        val precioSinIva = binding.etPreu.text.toString().toFloatOrNull() ?: 0f
-        // Obtener el IVA guardado (o un valor por defecto).
-        val iva = sharedPrefs.getFloat("iva", 0.10f)
-
-        // Aplicar el IVA al precio sin IVA.
-        val precioConIva = precioSinIva * (1 + iva)
-
-        // Guardar el precio con IVA (si lo deseas guardar en las preferencias).
-        sharedPrefs.edit().putFloat("precioConIva", precioConIva).apply()
-
-        // Aquí puedes actualizar el RecyclerView para que muestre el precio con IVA.
-
-        finish()  // Finalizar la actividad y volver atrás.
+        // Configurar el botón para aplicar el IVA
+        binding.btnApplyIva.setOnClickListener {
+            val ivaInput = binding.etIvaPercentage.text.toString()
+            val iva = ivaInput.toFloatOrNull()
+            if (iva != null) {
+                viewModel.ivaPercentage.value = iva // Actualizar el IVA
+                finish() // Cerrar la actividad después de aplicar
+            }
+        }
     }
 }
