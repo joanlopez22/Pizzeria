@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +18,7 @@
             android:id="@+id/etFilterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/filtre_descripcio"/>
+            android:hint="@string/filtre_descripcio" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -32,29 +31,10 @@
         <Spinner
             android:id="@+id/spinnerFilterType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Añadido TextInputLayout para el campo etIva -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ivaLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/filterTextLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="505dp"
-        app:layout_constraintBottom_toTopOf="@+id/sortGroup"
-        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteX="2dp" />
-
-
     <RadioGroup
         android:id="@+id/sortGroup"
         android:layout_width="wrap_content"
@@ -67,15 +47,36 @@
             android:id="@+id/rbSortReference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="#050505"
             android:checked="true"
-            android:text="@string/ordenar_referencia"/>
+            android:text="@string/ordenar_referencia" />
 
         <RadioButton
             android:id="@+id/rbSortDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ordenar_descripcio"/>
+            android:buttonTint="#070707"
+            android:text="@string/ordenar_descripcio" />
     </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ivaLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterTextLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="505dp"
+        app:layout_constraintBottom_toTopOf="@+id/sortGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"
+        tools:layout_editor_absoluteX="2dp" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
@@ -84,9 +85,17 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/afegir_referencia"
         android:src="@android:drawable/ic_menu_add"
+        app:backgroundTint="#D6D4D4"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFFFFF" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
