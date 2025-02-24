@@ -48,8 +48,9 @@
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
                 android:contentDescription="@string/eliminar"
-                android:src="@android:drawable/ic_delete"/>
+                android:src="@android:drawable/ic_delete" />
         </LinearLayout>
 
     </LinearLayout>

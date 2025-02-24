@@ -4,100 +4,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pizza_background"
+    android:padding="16dp"
     tools:context=".ui.MainActivity">
 
+    <!-- Mensaje de bienvenida temático -->
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Benvenuto a Pizzeria Manager!"
+        android:textColor="@color/pizza_red"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Sección de filtros -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/filterTextLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/filterTypeLayout"
+        app:boxStrokeColor="@color/pizza_green"
+        app:hintTextColor="@color/pizza_green_dark"
+        app:layout_constraintEnd_toStartOf="@id/filterTypeLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etFilterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/filtre_descripcio" />
+            android:hint="@string/filtre_descripcio"
+            android:textColor="@color/pizza_green_dark"
+            android:textColorHint="@color/pizza_green_light" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/filterTypeLayout"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/pizza_green"
+        app:hintTextColor="@color/pizza_green_dark"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@id/filterTextLayout">
 
         <Spinner
             android:id="@+id/spinnerFilterType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/pizza_green" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Añadido TextInputLayout para el campo etIva -->
+    <!-- Entrada de IVA -->
+
+    <!-- Lista de elementos (RecyclerView) -->
+
+    <!-- Opciones de ordenación -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="379dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sortGroup"
+        tools:layout_editor_absoluteX="0dp" />
+
     <RadioGroup
         android:id="@+id/sortGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"
+        tools:layout_editor_absoluteX="16dp">
 
         <RadioButton
             android:id="@+id/rbSortReference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="#050505"
             android:checked="true"
-            android:text="@string/ordenar_referencia" />
+            android:text="@string/ordenar_referencia"
+            android:textColor="@color/pizza_green_dark" />
 
         <RadioButton
             android:id="@+id/rbSortDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="#070707"
-            android:text="@string/ordenar_descripcio" />
+            android:text="@string/ordenar_descripcio"
+            android:textColor="@color/pizza_green_dark" />
     </RadioGroup>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ivaLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterTextLayout" />
+    <!-- Botones de acción flotantes -->
+
+    <!-- Guía para alineación -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"
         android:src="@android:drawable/ic_menu_preferences"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#FFFFFF"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="505dp"
-        app:layout_constraintBottom_toTopOf="@+id/sortGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterTextLayout"
-        tools:layout_editor_absoluteX="2dp" />
-
+        app:backgroundTint="@color/pizza_red"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/fabAdd"
+        app:layout_constraintTop_toBottomOf="@+id/filterTypeLayout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:contentDescription="@string/afegir_referencia"
         android:src="@android:drawable/ic_menu_add"
-        app:backgroundTint="#D6D4D4"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="@color/pizza_green"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#FFFFFF" />
+        app:layout_constraintTop_toBottomOf="@+id/filterTypeLayout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -105,6 +127,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

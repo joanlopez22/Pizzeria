@@ -4,8 +4,9 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.pizzeria.R
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ItemArticleBinding
 import com.example.pizzeria.ui.ArticleViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class ArticleAdapter(
     private val context: Context,
@@ -20,34 +22,43 @@ class ArticleAdapter(
     private val onDeleteClick: (Article) -> Unit
 ) : ListAdapter<Article, ArticleAdapter.ViewHolder>(DiffCallback()) {
 
-    private val viewModel: ArticleViewModel = ViewModelProvider(context as androidx.appcompat.app.AppCompatActivity).get(ArticleViewModel::class.java)
+    private val viewModel: ArticleViewModel by lazy {
+        ViewModelProvider(context as AppCompatActivity).get(ArticleViewModel::class.java)
+    }
+
+    init {
+        // Corrección: Eliminado el addObserver innecesario
+        viewModel.ivaPercentage.observe(context as LifecycleOwner) {
+            notifyDataSetChanged()
+        }
+    }
 
     inner class ViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
     class DiffCallback : DiffUtil.ItemCallback<Article>() {
-        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean = oldItem.referencia == newItem.referencia
-        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean = oldItem == newItem
+        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean =
+            oldItem.referencia == newItem.referencia
+        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean =
+            oldItem == newItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(
+            ItemArticleBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val article = getItem(position)
-
-        // Obtener el precio con IVA
-        val priceWithIva = viewModel.calculatePriceWithIva(article.preuSenseIva)
-
         with(holder.binding) {
             root.setBackgroundColor(getColorForType(article.tipus))
             tvReference.text = article.referencia
             tvDescription.text = article.descripcio
-
-            // Mostrar el precio con IVA
-            tvPrice.text = "%.2f€".format(priceWithIva)
-
+            tvPrice.text = "%.2f€".format(viewModel.calculatePriceWithIva(article.preuSenseIva))
             btnDelete.setOnClickListener { onDeleteClick(article) }
             root.setOnClickListener { onItemClick(article) }
         }
