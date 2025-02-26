@@ -1,11 +1,9 @@
 package com.example.pizzeria.data
 
-import androidx.lifecycle.LiveData
-
 class ArticleRepository(private val articleDao: ArticleDao) {
 
     // Función que aplica los filtros de texto, tipo y orden a la consulta
-    fun getFiltered(text: String, type: String, order: String): LiveData<List<Article>> {
+    suspend fun getFiltered(text: String, type: String, order: String): List<Article> {
         return when {
             // Si no hay texto y tipo es "ALL", devuelve todos los artículos con el orden adecuado
             text.isEmpty() && type == "ALL" -> {

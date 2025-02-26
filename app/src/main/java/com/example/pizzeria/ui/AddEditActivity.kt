@@ -2,43 +2,37 @@ package com.example.pizzeria.ui
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.pizzeria.R
 import com.example.pizzeria.data.Article
 import com.example.pizzeria.databinding.ActivityAddEditBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 
 class AddEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEditBinding
     private var currentArticle: Article? = null
-    private lateinit var viewModel: ArticleViewModel
+    private lateinit var articleManager: ArticleManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
-            .get(ArticleViewModel::class.java)
-
+        articleManager = ArticleManager(application)
         setupUI()
     }
 
     private fun setupUI() {
-        // Obtén el artículo actual si lo hay
+        // Obtener el artículo actual si lo hay
         currentArticle = intent.getParcelableExtra("article")
         currentArticle?.let { fillForm(it) }
 
         binding.btnSave.setOnClickListener { validateAndSave() }
 
-        // Configura el spinner de tipos de pizza
+        // Configurar el spinner de tipos de pizza
         ArrayAdapter.createFromResource(
             this,
-            R.array.tipus_options,  // Asegúrate de que tienes este array en strings.xml
+            R.array.tipus_options,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -105,18 +99,16 @@ class AddEditActivity : AppCompatActivity() {
 
         val article = Article(referencia, descripcio, tipus, preu!!)
 
-        // Lanzar la operación en un coroutine
-        lifecycleScope.launch {
-            if (currentArticle == null) {
-                // Si no hay un artículo actual, insertamos
-                viewModel.insert(article)
-            } else {
-                // Si hay un artículo actual, actualizamos
-                viewModel.update(article)
-            }
-            // Después de realizar la operación, cerramos la actividad
-            finish()
+        // Guardar o actualizar el artículo
+        if (currentArticle == null) {
+            // Si no hay un artículo actual, insertamos
+            articleManager.insert(article)
+        } else {
+            // Si hay un artículo actual, actualizamos
+            articleManager.update(article)
         }
+        // Después de realizar la operación, cerramos la actividad
+        finish()
     }
 
     private fun isReferenciaValid(referencia: String, tipus: String): Boolean {
